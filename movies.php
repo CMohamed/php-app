@@ -47,7 +47,7 @@
                         echo "<th>Title</th>";
                         echo "<th>Genre</th>";
                         echo "<th>Year</th>";
-                        echo "<th>Image</th>";
+                        // echo "<th>Image</th>";
                         echo "<th>Action</th>";
                         echo "</tr>";
                         echo "</thead>";
@@ -58,7 +58,7 @@
                             echo "<td style='vertical-align: middle' >" . $row['title'] . "</td>";
                             echo "<td style='vertical-align: middle' >" . $row['genre'] . "</td>";
                             echo "<td style='vertical-align: middle' >" . $row['year'] . "</td>";
-                            echo "<td style='vertical-align: middle' ><img style='height: 100px' src='" . $row['image'] . "' /></td>";
+                            // echo "<td style='vertical-align: middle' ><img style='height: 100px' src='" . $row['image'] . "' /></td>";
                             echo "<td style='vertical-align: middle' >";
                             echo "<div style='display: flex; flex-direction: column'>";
                             echo '<a href="actions/read_movie.php?id='. $row['id'] .'" class="mr-3" title="View Record" data-toggle="tooltip"><span class="fa fa-eye">Details</span></a>';

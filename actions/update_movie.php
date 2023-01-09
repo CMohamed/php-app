@@ -53,7 +53,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     // Check input errors before inserting in database
     if(empty($title_err) && empty($genre_err) && empty($year_err)){
         // Prepare an update statement
-        $sql = "UPDATE movies SET title=?, genre=?, year=?, image=? WHERE id=?";
+        $sql = "UPDATE movies SET title=?, genre=?, year=? WHERE id=?";
 
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters

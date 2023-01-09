@@ -3,56 +3,68 @@
 require_once "../config.php";
 
 // Define variables and initialize with empty values
-$name = $address = $salary = "";
-$name_err = $address_err = $salary_err = "";
+$title = $genre = $year = "";
+// $image = "";
+$title_err = $genre_err = $year_err = "";
+// $image_err = "";
 
 // Processing form data when form is submitted
 if(isset($_POST["id"]) && !empty($_POST["id"])){
     // Get hidden input value
     $id = $_POST["id"];
 
-    // Validate name
-    $input_name = trim($_POST["title"]);
-    if(empty($input_name)){
-        $name_err = "Please enter the movie title.";
-    } elseif(!filter_var($input_name, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
-        $name_err = "Please enter a valid name.";
+    // Validate title
+    $input_title = trim($_POST["title"]);
+    if(empty($input_title)){
+        $title_err = "Please enter the movie title.";
+    } elseif(!filter_var($input_title, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
+        $title_err = "Please enter a valid title.";
     } else{
-        $name = $input_name;
+        $title = $input_title;
     }
 
-    // Validate address address
-    $input_address = trim($_POST["genre"]);
-    if(empty($input_address)){
-        $address_err = "Please enter the movie genre.";
+    // Validate genre
+    $input_genre = trim($_POST["genre"]);
+    if(empty($input_genre)){
+        $genre_err = "Please enter the movie genre.";
     } else{
-        $address = $input_address;
+        $genre = $input_genre;
     }
 
-    // Validate salary
-    $input_salary = trim($_POST["year"]);
-    if(empty($input_salary)){
-        $salary_err = "Please enter the movie year.";
-    } elseif(!ctype_digit($input_salary)){
+    // Validate image
+    /*$input_image = trim($_POST["image"]);
+    if(empty($input_image)){
+        $image_err = "Please enter the movie genre.";
+    } else{
+        $image = $input_image;
+    }*/
+
+    // Validate year
+    $input_year = trim($_POST["year"]);
+    if(empty($input_year)){
+        $year_err = "Please enter the movie year.";
+    } elseif(!ctype_digit($input_year)){
         // TODO the movie year should be less than the current year
-        $salary_err = "Please enter a positive integer value.";
+        $year_err = "Please enter a positive integer value.";
     } else{
-        $salary = $input_salary;
+        $year = $input_year;
     }
 
     // Check input errors before inserting in database
-    if(empty($name_err) && empty($address_err) && empty($salary_err)){
+    if(empty($title_err) && empty($genre_err) && empty($year_err)){
         // Prepare an update statement
-        $sql = "UPDATE movies SET title=?, genre=?, year=? WHERE id=?";
+        $sql = "UPDATE movies SET title=?, genre=?, year=?, image=? WHERE id=?";
 
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sssi", $param_name, $param_address, $param_salary, $param_id);
+            mysqli_stmt_bind_param($stmt, "sssi", $param_title, $param_genre, $param_year, $param_id);
+            // mysqli_stmt_bind_param($stmt, "sssi", $param_title, $param_genre, $param_year, $param_image, $param_id);
 
             // Set parameters
-            $param_name = $name;
-            $param_address = $address;
-            $param_salary = $salary;
+            $param_title = $title;
+            $param_genre = $genre;
+            $param_year = $year;
+            // $param_image = $image;
             $param_id = $id;
 
             // Attempt to execute the prepared statement
@@ -96,9 +108,9 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
                     // Retrieve individual field value
-                    $name = $row["title"];
-                    $address = $row["genre"];
-                    $salary = $row["year"];
+                    $title = $row["title"];
+                    $genre = $row["genre"];
+                    $year = $row["year"];
                 } else{
                     // URL doesn't contain valid id. Redirect to error page
                     header("location: error.php");
@@ -146,18 +158,23 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                 <form action="<?php echo htmlspecialchars(basename($_SERVER['REQUEST_URI'])); ?>" method="post">
                     <div class="form-group">
                         <label>Title</label>
-                        <input type="text" name="title" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>">
-                        <span class="invalid-feedback"><?php echo $name_err;?></span>
+                        <input type="text" name="title" class="form-control <?php echo (!empty($title_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $title; ?>">
+                        <span class="invalid-feedback"><?php echo $title_err;?></span>
                     </div>
                     <div class="form-group">
                         <label>Genre</label>
-                        <textarea name="genre" class="form-control <?php echo (!empty($address_err)) ? 'is-invalid' : ''; ?>"><?php echo $address; ?></textarea>
-                        <span class="invalid-feedback"><?php echo $address_err;?></span>
+                        <textarea name="genre" class="form-control <?php echo (!empty($genre_err)) ? 'is-invalid' : ''; ?>"><?php echo $genre; ?></textarea>
+                        <span class="invalid-feedback"><?php echo $genre_err;?></span>
                     </div>
+                    <!--<div class="form-group">
+                        <label>Image (link)</label>
+                        <textarea name="image" class="form-control <?php echo (!empty($image_err)) ? 'is-invalid' : ''; ?>"><?php echo $image; ?></textarea>
+                        <span class="invalid-feedback"><?php echo $image_err;?></span>
+                    </div>-->
                     <div class="form-group">
                         <label>Year</label>
-                        <input type="text" name="year" class="form-control <?php echo (!empty($salary_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $salary; ?>">
-                        <span class="invalid-feedback"><?php echo $salary_err;?></span>
+                        <input type="text" name="year" class="form-control <?php echo (!empty($year_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $year; ?>">
+                        <span class="invalid-feedback"><?php echo $year_err;?></span>
                     </div>
                     <input type="hidden" name="id" value="<?php echo $id; ?>"/>
                     <input type="submit" class="btn btn-primary" value="Submit">

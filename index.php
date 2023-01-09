@@ -1,8 +1,32 @@
-<!-- Display the login form -->
-<form method="post" action="login.php">
-    <label for="username">Username:</label><br>
-    <input type="text" id="username" name="username"><br>
-    <label for="password">Password:</label><br>
-    <input type="password" id="password" name="password"><br><br>
-    <input type="submit" value="Submit" name="submit">
-</form>
+<?php
+// Initialize the session
+session_start();
+
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: users/login.php");
+    exit;
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body{ font: 14px sans-serif; text-align: center; }
+    </style>
+</head>
+<body>
+<h1 class="my-5">Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Welcome to our site.</h1>
+<p>
+<div style="display: flex; flex-direction: column; margin: auto; width: 50%">
+    <!--<a href="reset-password.php" class="btn btn-warning">Reset Your Password</a>-->
+    <a href="movies.php" class="btn btn-info ml-3">Go to movies dashboard</a>
+    <a href="users/logout.php" class="btn btn-danger ml-3">Sign Out of Your Account</a>
+</div>
+</p>
+</body>
+</html>
